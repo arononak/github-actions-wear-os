@@ -1,4 +1,4 @@
-# Github Actions Gnome Extension ⌚
+# Github Actions Wear OS ⌚
 
 [![MIT License](https://img.shields.io/badge/License-MIT-white.svg)](https://opensource.org/licenses/)
 
