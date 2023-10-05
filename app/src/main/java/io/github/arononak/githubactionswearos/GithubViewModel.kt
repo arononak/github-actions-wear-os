@@ -2,11 +2,13 @@ package io.github.arononak.githubactionswearos
 
 import android.app.Application
 import android.content.Context
+import androidx.compose.ui.text.toLowerCase
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import io.github.arononak.githubactionswearos.presentation.NotificationController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
+import java.util.Locale
 
 interface GithubService {
     @GET("/repos/{owner}/{repo}/actions/runs")
@@ -32,7 +35,13 @@ interface GithubService {
 
     data class WorkflowRunsResponse(val totalCount: Int, val workflowRuns: List<Run>) {
         data class Run(val id: Long, val status: String, val conclusion: String) {
-            override fun toString(): String = "$status $conclusion"
+            override fun toString(): String {
+                return "$status $conclusion"
+                    .lowercase(Locale.ROOT)
+                    .replace("null", "")
+                    .replace("_", " ")
+                    .trim()
+            }
         }
     }
 }
@@ -112,7 +121,7 @@ class GithubRepository {
     }
 }
 
-class GithubViewModel(app: Application) : AndroidViewModel(app) {
+class GithubViewModel(private val app: Application) : AndroidViewModel(app) {
     private val settingsRepository = SettingsRepository(app)
     private val githubRepository = GithubRepository()
 
@@ -126,18 +135,6 @@ class GithubViewModel(app: Application) : AndroidViewModel(app) {
 
                 refreshData(settings)
                 delay(settings.refreshTime * 1000L)
-            }
-        }
-    }
-
-    private suspend fun refreshData(settings: SettingsRepository.Settings) {
-        if (settings.owner.isNotEmpty() && settings.repo.isNotEmpty()) {
-            val status = githubRepository.fetchStatus(settings)
-
-            if (status != null) {
-                state.value = state.value.copy(status = status)
-            } else {
-                state.value = state.value.copy(status = "Loading")
             }
         }
     }
@@ -166,8 +163,27 @@ class GithubViewModel(app: Application) : AndroidViewModel(app) {
     fun onRefreshTimeChanged(refreshTime: Int) {
         state.value.settings ?: return
 
-        state.value = state.value.copy(settings = state.value.settings!!.copy(refreshTime = refreshTime))
+        state.value =
+            state.value.copy(settings = state.value.settings!!.copy(refreshTime = refreshTime))
         settingsRepository.refreshTime = refreshTime
+    }
+
+    private suspend fun refreshData(settings: SettingsRepository.Settings) {
+        if (settings.owner.isNotEmpty() && settings.repo.isNotEmpty()) {
+            val previousStatus = state.value.status
+            val currentStatus = githubRepository.fetchStatus(settings)
+
+            if (previousStatus == "in progress") {
+                if (currentStatus?.contains("completed") == true) {
+                    val success = currentStatus.contains("success")
+
+                    NotificationController.showCompletedBuild(app, success)
+                }
+            }
+
+            val newStatus = currentStatus ?: "Loading"
+            state.value = state.value.copy(status = newStatus)
+        }
     }
 
     data class State(

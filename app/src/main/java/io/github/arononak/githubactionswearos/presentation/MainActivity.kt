@@ -8,26 +8,34 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.*
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -36,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.material.Button
-import androidx.wear.compose.material.Chip
 import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -44,6 +51,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import io.github.arononak.githubactionswearos.GithubViewModel
+import io.github.arononak.githubactionswearos.R
 import io.github.arononak.githubactionswearos.presentation.theme.GithubActionsWearOSTheme
 import kotlinx.coroutines.*
 import java.lang.Integer.max
@@ -70,26 +78,61 @@ fun GithubActionsApp() {
             modifier = Modifier.background(MaterialTheme.colors.background)
         ) {
             composable("Landing") {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colors.background),
+                        .background(Color.Gray),
                 ) {
-                    GithubActionsStatus(text = githubViewModel.state.collectAsState().value.status)
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Chip(
-                        icon = {
+                    Box(modifier = Modifier.align(Alignment.Center)) {
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background),
+                        ) {
                             Icon(
-                                painter = painterResource(id = android.R.drawable.ic_menu_preferences),
-                                contentDescription = "Settings",
-                                modifier = Modifier.wrapContentSize(align = Alignment.Center),
+                                imageVector = ImageVector.vectorResource(id = R.drawable.github_white),
+                                contentDescription = "Github Icon",
+                                modifier = Modifier
+                                    .height(32.dp)
+                                    .width(32.dp)
                             )
-                        },
-                        label = { Text(text = "Settings") },
-                        onClick = { navController.navigate("Settings") },
-                    )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            GithubActionsStatus(text = githubViewModel.state.collectAsState().value.status)
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .align(BottomCenter)
+                            .padding(bottom = 20.dp)
+                            .fillMaxSize()
+                    ) {
+                        Box(modifier = Modifier.align(BottomCenter)) {
+                            Button(
+                                onClick = { navController.navigate("Settings") },
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .background(
+                                        brush = Brush.sweepGradient(
+                                            colors = listOf(
+                                                Color(0xFF2962FF),
+                                                Color(0xFF00B0FF)
+                                            )
+                                        ),
+                                        shape = CircleShape
+                                    ),
+                                shape = CircleShape,
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
             composable("Settings") {
@@ -239,7 +282,7 @@ fun GithubActionsStatus(text: String) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
+        color = Color.White,
         text = text,
     )
 }

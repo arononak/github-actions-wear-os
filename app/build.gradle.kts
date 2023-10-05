@@ -57,6 +57,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0")
     implementation("androidx.wear.compose:compose-navigation:1.1.0")
     implementation("androidx.wear:wear-input:1.2.0-alpha02")
+    implementation("androidx.compose.material:material:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     implementation("androidx.percentlayout:percentlayout:1.0.0")
