@@ -6,10 +6,13 @@
 
 ## 🏞 Preview
 
-![](https://github.com/arononak/github-actions-wear-os/blob/main/docs/preview.png?raw=true)
+|                                                                                              |                                                                                              |
+|:--------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:|
+| ![](https://github.com/arononak/github-actions-wear-os/blob/main/docs/preview1.png?raw=true) | ![](https://github.com/arononak/github-actions-wear-os/blob/main/docs/preview2.png?raw=true) |
 
 ## 📝 © 2023 Aron Onak
 
 > **Warning**<br>
 > The GitHub logo is a trademark of Microsoft.<br>
 > This extension is not affiliated, funded, or in any way associated with Microsoft and GitHub.
+
