@@ -24,3 +24,15 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    
+    - name: Upload App Debug
+      uses: actions/upload-artifact@v2
+        with:
+          name: app-debug
+          path: ./app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Upload App Release
+      uses: actions/upload-artifact@v2
+        with:
+          name: app-release-unsigned
+          path: ./app/build/outputs/apk/release/app-release-unsigned.apk
