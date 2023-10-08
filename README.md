@@ -4,6 +4,8 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/arononak/github-actions-wear-os)](https://github.com/arononak/github-actions-wear-os/releases/latest)
 
+[![Android CI](https://github.com/arononak/github-actions-wear-os/actions/workflows/android.yml/badge.svg?branch=main)](https://github.com/arononak/github-actions-wear-os/actions/workflows/android.yml)
+
 ## 🏞 Preview
 
 |                                                                                              |                                                                                              |
